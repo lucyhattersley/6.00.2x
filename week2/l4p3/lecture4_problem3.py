@@ -1,5 +1,6 @@
+import statistics
+
 def stdDevOfLengths(L):
-    import statistics
     """
     Accepts a list of strings (L)
     Counts the chars in each string
@@ -7,10 +8,20 @@ def stdDevOfLengths(L):
     """
     if len(L) == 0:
         return float('NaN')
-    L2 = []
+    X = []
     for t in L:
-        L2.append(len(t))
-    return statistics.pstdev(L2)
+        X.append(len(t))
+    
+    mean = sum(X) / len(X)
+    
+    result = 0.0
+    for t in X:
+        result += (t - mean)**2
+    
+    result = result / len(L)
+    return result ** 0.5
+    
+    #return statistics.pstdev(X)
     
 L = ['apples', 'oranges', 'kiwis', 'pineapples']
 print stdDevOfLengths(L)
