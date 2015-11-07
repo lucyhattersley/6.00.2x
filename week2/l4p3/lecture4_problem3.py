@@ -1,12 +1,10 @@
-import statistics
-
 def stdDevOfLengths(L):
     """
     Accepts a list of strings (L)
     Counts the chars in each string
     Finds the mean, calculates the variance and returns the standard deviation
     """
-    if len(L) == 0:
+    if not L:
         return float('NaN')
     X = []
     for t in L:
@@ -18,10 +16,12 @@ def stdDevOfLengths(L):
     for t in X:
         result += (t - mean)**2
     
-    result = result / len(L)
-    return result ** 0.5
-    
-    #return statistics.pstdev(X)
-    
-L = ['apples', 'oranges', 'kiwis', 'pineapples']
+    return (result / len(L)) ** 0.5
+
+#L = [] 
+#L = ['a', 'z', 'p']    
+#L = ['apples', 'oranges', 'kiwis', 'pineapples']
+L = ['h', 'mi', 'uios', 'qkpsjixo', 'bmhiklywgy', 'ltpxfmympwwuex', 'o']
 print stdDevOfLengths(L)
+print "Should be 4.681705602335411"
+print 4.681705602335411 == stdDevOfLengths(L)
