@@ -4,11 +4,11 @@ def stdDevOfLengths(L):
     Counts the chars in each string
     Finds the mean, calculates the variance and returns the standard deviation
     """
-    if not L:
+    if len(L) == 0:
         return float('NaN')
     X = []
     for t in L:
-        X.append(len(t))
+        X.append(float(len(t)))
     
     mean = sum(X) / len(X)
     
@@ -16,12 +16,5 @@ def stdDevOfLengths(L):
     for t in X:
         result += (t - mean)**2
     
-    return (result / len(L)) ** 0.5
-
-#L = [] 
-#L = ['a', 'z', 'p']    
-#L = ['apples', 'oranges', 'kiwis', 'pineapples']
-L = ['h', 'mi', 'uios', 'qkpsjixo', 'bmhiklywgy', 'ltpxfmympwwuex', 'o']
-print stdDevOfLengths(L)
-print "Should be 4.681705602335411"
-print 4.681705602335411 == stdDevOfLengths(L)
+    result = result / len(L)
+    return result ** 0.5
