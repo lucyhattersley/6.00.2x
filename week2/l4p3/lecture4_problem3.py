@@ -1,23 +1,16 @@
 def stdDevOfLengths(L):
+    import statistics
     """
     Accepts a list of strings (L)
     Counts the chars in each string
     Finds the mean, calculates the variance and returns the standard deviation
     """
-    ints = []
-    for l in L:
-        ints.append(len(l))
+    if len(L) == 0:
+        return float('NaN')
+    L2 = []
+    for t in L:
+        L2.append(len(t))
+    return statistics.pstdev(L2)
     
-    # find mean of ints
-    mean = sum(ints)/len(ints)
-    return mean
-    
-    #find variance
-    #this isn't working. I need to figure out how to sum up each item
-    #in ints properly
-    variance = sum((ints-mean)**2)/len(ints)
-    sd = sqrt(variance)
-    return sd
-
 L = ['apples', 'oranges', 'kiwis', 'pineapples']
 print stdDevOfLengths(L)
