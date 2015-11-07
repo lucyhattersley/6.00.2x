@@ -1,5 +1,3 @@
-import statistics
-
 def stdDevOfLengths(L):
     """
     Accepts a list of strings (L)
@@ -14,14 +12,15 @@ def stdDevOfLengths(L):
     
     mean = sum(X) / len(X)
     
-    result = 0.0
+    result = long(0.0)
     for t in X:
         result += (t - mean)**2
     
     result = result / len(L)
     return result ** 0.5
-    
-    #return statistics.pstdev(X)
-    
-L = ['apples', 'oranges', 'kiwis', 'pineapples']
+        
+#L = ['apples', 'oranges', 'kiwis', 'pineapples']
+#L = ['h', 'mi', 'uios', 'qkpsjixo', 'bmhiklywgy', 'ltpxfmympwwuex', 'o']
+L = ['h', 'mi', 'uios', 'qkpsjixo', 'bmhiklywgy', 'ltpxfmympwwuex', 'o']
 print stdDevOfLengths(L)
+
