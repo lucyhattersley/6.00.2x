@@ -246,8 +246,7 @@ class StandardRobot(Robot):
             self.setRobotDirection(random.randint(0, 360))
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-testRobotMovement(StandardRobot, RectangularRoom)
-
+#testRobotMovement(StandardRobot, RectangularRoom)
 
 # === Problem 3
 def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
@@ -268,11 +267,34 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     robot_type: class of robot to be instantiated (e.g. StandardRobot or
                 RandomWalkRobot)
     """
-    raise NotImplementedError
+
+    
+    trialresults = [] # a list of the results from each trial
+    
+    for trial in range(num_trials):
+        room = RectangularRoom(width, height) # creates a new room for each trial
+        
+        robots = [] # list of robot instances
+        for robot in range(num_robots):
+            robots.append(robot_type(room, speed))
+        
+        steps = 0 # resets the steps
+        
+        # The trial starts by checking the percentage of floor cleaned
+        # if less than the min_coverage it runs the trial
+        # trial moves the robots and cleans new tiles.
+        percentagecleaned = float(room.getNumCleanedTiles()) / float(room.getNumTiles())
+        while percentagecleaned < min_coverage:
+            for robot in robots:
+                robot.updatePositionAndClean()
+            steps += 1
+            percentagecleaned = float(room.getNumCleanedTiles()) / float(room.getNumTiles())
+        trialresults.append(steps) # appends results
+    return float(sum(trialresults) / len(trialresults)) # returns the average from the tests
 
 # Uncomment this line to see how much your simulation takes on average
-##print  runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot)
-
+#print  runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot)
+#print runSimulation(1, 1.0, 10, 10, 0.75, 30, RandomWalkRobot)
 
 # === Problem 4
 class RandomWalkRobot(Robot):
@@ -287,7 +309,13 @@ class RandomWalkRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        raise NotImplementedError
+        newpos = self.position.getNewPosition(self.direction, self.speed)
+        if self.room.isPositionInRoom(newpos):
+            self.setRobotPosition(newpos)
+            self.room.cleanTileAtPosition(self.position)
+            self.setRobotDirection(random.randint(0,360))
+        else:
+            self.setRobotDirection(random.randint(0, 360))
 
 
 def showPlot1(title, x_label, y_label):
