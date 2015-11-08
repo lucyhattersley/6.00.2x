@@ -323,8 +323,8 @@ def showPlot1(title, x_label, y_label):
     What information does the plot produced by this function tell you?
     """
     num_robot_range = range(1, 11)
-    times1 = []
-    times2 = []
+    times1 = [] # list of standard robots
+    times2 = [] # list of random walk robots
     for num_robots in num_robot_range:
         print "Plotting", num_robots, "robots..."
         times1.append(runSimulation(num_robots, 1.0, 20, 20, 0.8, 20, StandardRobot))
