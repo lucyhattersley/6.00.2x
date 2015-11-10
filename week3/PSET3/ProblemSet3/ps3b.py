@@ -35,6 +35,8 @@ class SimpleVirus(object):
         maxBirthProb: Maximum reproduction probability (a float between 0-1)        
         clearProb: Maximum clearance probability (a float between 0-1).
         """
+        self.maxBirthProb = maxBirthProb
+        self.clearProb = clearProb
 
         # TODO
 
@@ -42,13 +44,13 @@ class SimpleVirus(object):
         """
         Returns the max birth probability.
         """
-        # TODO
+        return self.maxBirthProb
 
     def getClearProb(self):
         """
         Returns the clear probability.
         """
-        # TODO
+        return self.clearProb
 
     def doesClear(self):
         """ Stochastically determines whether this virus particle is cleared from the
@@ -56,10 +58,12 @@ class SimpleVirus(object):
         returns: True with probability self.getClearProb and otherwise returns
         False.
         """
-
-        # TODO
-
+        if random.random() < self.getClearProb:
+            return True
+        else:
+            return False
     
+
     def reproduce(self, popDensity):
         """
         Stochastically determines whether this virus particle reproduces at a
@@ -81,6 +85,10 @@ class SimpleVirus(object):
         """
 
         # TODO
+        if  random.random() < self.maxBirthProb * (1  - popDensity):
+            return SimpleVirus(self.maxBirthPro, self.clearProb)
+        else:
+            raise NoChildException
 
 
 
@@ -100,21 +108,22 @@ class Patient(object):
 
         maxPop: the maximum virus population for this patient (an integer)
         """
+        self.viruses = viruses
+        self.maxPop = maxPop
 
-        # TODO
 
     def getViruses(self):
         """
         Returns the viruses in this Patient.
         """
-        # TODO
+        return self.viruses
 
 
     def getMaxPop(self):
         """
         Returns the max population.
         """
-        # TODO
+        return self.maxPop
 
 
     def getTotalPop(self):
@@ -122,8 +131,7 @@ class Patient(object):
         Gets the size of the current total virus population. 
         returns: The total virus population (an integer)
         """
-
-        # TODO        
+        return len(self.viruses)
 
 
     def update(self):
