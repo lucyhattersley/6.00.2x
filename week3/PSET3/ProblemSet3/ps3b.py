@@ -154,17 +154,17 @@ class Patient(object):
         """
 
         for virus in self.viruses:
-            try:
-                virus.doesClear()
+            if virus.doesClear():
                 self.viruses.remove(virus)
-            except NoChildException:
-                pass
         
         popDensity = float(self.getTotalPop()) / self.getMaxPop()
         
         for virus in self.viruses:
-            if virus.reproduce(popDensity):
+            try:
+                virus.reproduce(popDensity)
                 self.viruses.append(SimpleVirus(virus.getMaxBirthProb(), virus.getClearProb()))
+            except NoChildException:
+                pass
         
         return len(self.viruses)
 
@@ -188,8 +188,32 @@ def simulationWithoutDrug(numViruses, maxPop, maxBirthProb, clearProb,
     clearProb: Maximum clearance probability (a float between 0-1)
     numTrials: number of simulation runs to execute (an integer)
     """
+    # creating list of viruses
+    viruses = []
+    for i in range(numViruses):
+        viruses.append(SimpleVirus(maxBirthProb, clearProb))
 
-    # TODO
+    # creating patient
+    patient = Patient(viruses, maxPop)
+    
+    # running trials
+    trials = []   
+    for trial in range(numTrials):
+        population = []
+        for step in range(300):
+            population.append(patient.update())
+        trials.append(sum(population) / len(population))
+    
+    for trial in range(len(trials)):
+        pylab.plot(trial,trials[trial])
+    pylab.title('RUNNING AND ANALYZING A SIMPLE SIMULATION (NO DRUG TREATMENT')
+    pylab.xlabel('Trials')
+    pylab.ylabel('Viruses')
+    pylab.legend("Virus levels")
+    pylab.show()
+    
+
+simulationWithoutDrug(100, 1000, 0.1, 0.05, 300)
 
 
 
