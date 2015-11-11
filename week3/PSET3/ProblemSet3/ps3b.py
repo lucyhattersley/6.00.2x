@@ -58,7 +58,7 @@ class SimpleVirus(object):
         returns: True with probability self.getClearProb and otherwise returns
         False.
         """
-        if random.random() < self.getClearProb:
+        if random.random() < self.getClearProb():
             return True
         else:
             return False
@@ -86,7 +86,7 @@ class SimpleVirus(object):
 
         # TODO
         if  random.random() < self.maxBirthProb * (1  - popDensity):
-            return SimpleVirus(self.maxBirthPro, self.clearProb)
+            return SimpleVirus(self.maxBirthProb, self.clearProb)
         else:
             raise NoChildException
 
@@ -153,7 +153,20 @@ class Patient(object):
         integer)
         """
 
-        # TODO
+        for virus in self.viruses:
+            try:
+                virus.doesClear()
+                self.viruses.remove(virus)
+            except NoChildException:
+                pass
+        
+        popDensity = float(self.getTotalPop()) / self.getMaxPop()
+        
+        for virus in self.viruses:
+            if virus.reproduce(popDensity):
+                self.viruses.append(SimpleVirus(virus.getMaxBirthProb(), virus.getClearProb()))
+        
+        return len(self.viruses)
 
 
 
