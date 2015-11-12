@@ -189,31 +189,36 @@ def simulationWithoutDrug(numViruses, maxPop, maxBirthProb, clearProb,
     numTrials: number of simulation runs to execute (an integer)
     """
     # creating list of viruses
-    viruses = []
-    for i in range(numViruses):
-        viruses.append(SimpleVirus(maxBirthProb, clearProb))
-
-    # creating patient
-    patient = Patient(viruses, maxPop)
+    def Trial():
+        viruses = []
+        for i in range(numViruses):
+            viruses.append(SimpleVirus(maxBirthProb, clearProb))
     
-    # running trials
-    trials = []   
-    for trial in range(numTrials):
+        # creating patient
+        patient = Patient(viruses, maxPop)
+        
         population = []
-        for step in range(300):
+        #for step in range(300):
+        for step in range(10): #this is a shorter test debug. switch back to 300
             population.append(patient.update())
-        trials.append(sum(population) / len(population))
+        return population
     
-    for trial in range(len(trials)):
-        pylab.plot(trial,trials[trial])
-    pylab.title('RUNNING AND ANALYZING A SIMPLE SIMULATION (NO DRUG TREATMENT')
-    pylab.xlabel('Trials')
-    pylab.ylabel('Viruses')
-    pylab.legend("Virus levels")
-    pylab.show()
+    trials = []
+    for i in range(numTrials):
+        trials.append(Trial())
+    
+    return trials
+    
+    # plotting the trial
+    #pylab.plot(range(300), population)
+    #pylab.title('RUNNING AND ANALYZING A SIMPLE SIMULATION (NO DRUG TREATMENT')
+    #pylab.xlabel('Steps')
+    #pylab.ylabel('Population')
+    #pylab.legend("Virus population levels")
+    #pylab.show()
     
 
-simulationWithoutDrug(100, 1000, 0.1, 0.05, 300)
+results = simulationWithoutDrug(100, 1000, 0.1, 0.05, 2)
 
 
 
