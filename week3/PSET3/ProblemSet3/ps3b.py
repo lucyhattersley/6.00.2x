@@ -1,5 +1,4 @@
 # Problem Set 3: Simulating the Spread of Disease and Virus Population Dynamics 
-
 import numpy
 import random
 import pylab
@@ -190,6 +189,12 @@ def simulationWithoutDrug(numViruses, maxPop, maxBirthProb, clearProb,
     """
     # creating list of viruses
     def Trial():
+        """
+        Creates an list of viruses numViruses long
+        Creates a patient with the viruses and a maxPop
+        Runs a trial for 300 steps adjusting the patients population levels
+        Returns a list of the population levels
+        """
         viruses = []
         for i in range(numViruses):
             viruses.append(SimpleVirus(maxBirthProb, clearProb))
@@ -198,27 +203,27 @@ def simulationWithoutDrug(numViruses, maxPop, maxBirthProb, clearProb,
         patient = Patient(viruses, maxPop)
         
         population = []
-        #for step in range(300):
-        for step in range(10): #this is a shorter test debug. switch back to 300
+        for step in range(steps):
             population.append(patient.update())
         return population
     
+    steps = 300
     trials = []
     for i in range(numTrials):
         trials.append(Trial())
     
-    return trials
+    avg = [float(sum(col))/len(col) for col in zip(*trials)]
     
-    # plotting the trial
-    #pylab.plot(range(300), population)
-    #pylab.title('RUNNING AND ANALYZING A SIMPLE SIMULATION (NO DRUG TREATMENT')
-    #pylab.xlabel('Steps')
-    #pylab.ylabel('Population')
-    #pylab.legend("Virus population levels")
-    #pylab.show()
+    #plotting the trial
+    pylab.plot(range(steps), avg)
+    pylab.title('RUNNING AND ANALYZING A SIMPLE SIMULATION (NO DRUG TREATMENT')
+    pylab.xlabel('Steps')
+    pylab.ylabel('Population')
+    pylab.legend("Virus population levels")
+    pylab.show()
     
 
-results = simulationWithoutDrug(100, 1000, 0.1, 0.05, 2)
+#simulationWithoutDrug(100, 1000, 0.1, 0.05, 5)
 
 
 
@@ -247,21 +252,22 @@ class ResistantVirus(SimpleVirus):
         mutProb: Mutation probability for this virus particle (a float). This is
         the probability of the offspring acquiring or losing resistance to a drug.
         """
-
-        # TODO
+        SimpleVirus.__init__(self, maxBirthProb, clearProb)
+        self.resistances = resistances
+        self.mutProb = mutProb
 
 
     def getResistances(self):
         """
         Returns the resistances for this virus.
         """
-        # TODO
+        return self.getResistances
 
     def getMutProb(self):
         """
         Returns the mutation probability for this virus.
         """
-        # TODO
+        return self.getMutProb
 
     def isResistantTo(self, drug):
         """
@@ -274,8 +280,10 @@ class ResistantVirus(SimpleVirus):
         returns: True if this virus instance is resistant to the drug, False
         otherwise.
         """
-        
-        # TODO
+        if drug in self.resistances:
+            return True
+        else:
+            return False
 
 
     def reproduce(self, popDensity, activeDrugs):
