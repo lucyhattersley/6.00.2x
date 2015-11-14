@@ -83,7 +83,6 @@ class SimpleVirus(object):
         NoChildException if this virus particle does not reproduce.               
         """
 
-        # TODO
         if  random.random() < self.maxBirthProb * (1  - popDensity):
             return SimpleVirus(self.maxBirthProb, self.clearProb)
         else:
@@ -281,7 +280,7 @@ class ResistantVirus(SimpleVirus):
         otherwise.
         """
         if drug in self.resistances:
-            if resistances[drug]:
+            if self.resistances[drug]:
                 return True
             else:
                 return False
@@ -332,36 +331,34 @@ class ResistantVirus(SimpleVirus):
         maxBirthProb and clearProb values as this virus. Raises a
         NoChildException if this virus particle does not reproduce.
         """
-        #The drug check is good. Don't change.
+        # Check that virus is resistant to all drugs in activeDrugs
         for drug in activeDrugs:
             if drug not in self.resistances:
                 raise NoChildException
-            elif drug in self.resistances and resistances[drug] == False:
+            elif drug in self.resistances and self.resistances[drug] == False:
                 raise NoChildException
             else:
                 pass
         
-        # This bit still needs work
-        newresistances = {}
-        for r in self.resistances:
-            if random.random() < self.getMutProb:
-                newresistances[r] = True
-        return ResistantVirus(self.maxBirthProb, self.clearProb, newresistances, self.mutProb)
+        # Make a copy of resistances and mutate
+        newResistances = self.resistances.copy()
+        for r in newResistances:
+            if random.random() < self.mutProb:
+                newResistances[r] = not newResistances[r]
+
+        # Stochastically return offspring
+        if random.random() < self.maxBirthProb * (1 - popDensity):
+            return ResistantVirus(self.maxBirthProb, self.clearProb, newResistances, self.mutProb)
+        else:
+            raise NoChildException
         
 # Tester code 
-# sets activeDrugs and resistances
-# creates a test virus using ResistantVirus class
-
-activeDrugs = ['guttagonol', 'srinol']
-resistances = {'guttagonol': True, 'srinol': True, 'trinanol': True}
+virus = ResistantVirus(0.0, 0.0, {}, 0.0)
 viruses = []
-offspring = []
-for i in range(100):
-    viruses.append(ResistantVirus(0.4, 0.2, resistances, 0.9))
-    for virus in viruses:
-        offspring.append(virus.reproduce(10, activeDrugs))
-for off in offspring:
-    print off.getResistances()
+for i in range(10):
+    viruses.append(virus)
+patient = Patient(viruses, 100)
+
 
 
 class TreatedPatient(Patient):
