@@ -261,13 +261,13 @@ class ResistantVirus(SimpleVirus):
         """
         Returns the resistances for this virus.
         """
-        return self.getResistances
+        return self.resistances
 
     def getMutProb(self):
         """
         Returns the mutation probability for this virus.
         """
-        return self.getMutProb
+        return self.mutProb
 
     def isResistantTo(self, drug):
         """
@@ -281,7 +281,10 @@ class ResistantVirus(SimpleVirus):
         otherwise.
         """
         if drug in self.resistances:
-            return True
+            if resistances[drug]:
+                return True
+            else:
+                return False
         else:
             return False
 
@@ -297,8 +300,7 @@ class ResistantVirus(SimpleVirus):
         then it will NOT reproduce.
 
         Hence, if the virus is resistant to all drugs
-        in activeDrugs, then the virus reproduces with probability:      
-
+        in activeDrugs, then the virus reproduces with probability:     
         self.maxBirthProb * (1 - popDensity).                       
 
         If this virus particle reproduces, then reproduce() creates and returns
@@ -330,10 +332,37 @@ class ResistantVirus(SimpleVirus):
         maxBirthProb and clearProb values as this virus. Raises a
         NoChildException if this virus particle does not reproduce.
         """
+        #The drug check is good. Don't change.
+        for drug in activeDrugs:
+            if drug not in self.resistances:
+                raise NoChildException
+            elif drug in self.resistances and resistances[drug] == False:
+                raise NoChildException
+            else:
+                pass
+        
+        # This bit still needs work
+        newresistances = {}
+        for r in self.resistances:
+            if random.random() < self.getMutProb:
+                newresistances[r] = True
+        return ResistantVirus(self.maxBirthProb, self.clearProb, newresistances, self.mutProb)
+        
+# Tester code 
+# sets activeDrugs and resistances
+# creates a test virus using ResistantVirus class
 
-        # TODO
+activeDrugs = ['guttagonol', 'srinol']
+resistances = {'guttagonol': True, 'srinol': True, 'trinanol': True}
+viruses = []
+offspring = []
+for i in range(100):
+    viruses.append(ResistantVirus(0.4, 0.2, resistances, 0.9))
+    for virus in viruses:
+        offspring.append(virus.reproduce(10, activeDrugs))
+for off in offspring:
+    print off.getResistances()
 
-            
 
 class TreatedPatient(Patient):
     """
