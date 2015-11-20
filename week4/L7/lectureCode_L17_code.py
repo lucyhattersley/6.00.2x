@@ -57,12 +57,13 @@ def fitData(fileName):
     # use line equation to graph predicted values
     estYVals = a*xVals + b
     k = 1/a
-    pylab.plot(xVals, estYVals, label = 'Linear fit, k = '
-               + str(round(k, 5)))
+    pylab.plot(xVals, estYVals, 'r', 
+                label = 'Linear Fit' + ', R2 = '
+                             + str(round(rSquare(yVals, estYVals), 4)))
     pylab.legend(loc = 'best')
 
-fitData(springData)
-pylab.show()
+#fitData(springData)
+#pylab.show()
 
 def fitData1(fileName):
     xVals, yVals = getData(fileName)
@@ -119,12 +120,15 @@ def fitData3(fileName):
     # use line equation to graph predicted values
     estYVals = a*xVals + b
     k = 1/a
-    pylab.plot(xVals, estYVals, label = 'Linear fit, k = '
-               + str(round(k, 5)))
+    pylab.plot(xVals, estYVals, 'r', 
+                label = 'Linear Fit' + ', R2 = '
+                             + str(round(rSquare(yVals, estYVals), 4)))
+    #pylab.plot(xVals, estYVals, label = 'Linear fit, k = '
+    #           + str(round(k, 5)))
     pylab.legend(loc = 'best')
 
-fitData3(springData)
-pylab.show()
+#fitData3(springData)
+#pylab.show()
 
 def getTrajectoryData(fileName):
     dataFile = open(fileName, 'r')
@@ -190,7 +194,7 @@ def tryFits1(fName):
     altitudes = a*distances + b
     pylab.plot(distances, altitudes, 'r',
                label = 'Linear Fit' + ', R2 = '
-               + str(round(rSquare(meanHeights, altitudes), 4)))
+                              + str(round(rSquare(meanHeights, altitudes), 4)))
 #     a,b,c = pylab.polyfit(distances, meanHeights, 2)
 #     altitudes = a*(distances**2) + b*distances + c
 #     pylab.plot(distances, altitudes, 'g',
@@ -198,7 +202,13 @@ def tryFits1(fName):
 #                + str(round(rSquare(meanHeights, altitudes), 4)))
     pylab.legend()
 
-tryFits1(launcherData)
+#tryFits1(launcherData)
+#pylab.show()
+
+fitData(springData)
+pylab.show()
+
+fitData3(springData)
 pylab.show()
 
 
