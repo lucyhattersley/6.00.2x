@@ -31,7 +31,7 @@ def simulationDelayedTreatment(numTrials):
     mutProb = 0.005
 
     def Trial(insertionPoint):
-    # creating a list of virus instances
+        # creating a list of virus instances
         viruses = []
         for i in range(numViruses):
             viruses.append(ResistantVirus(maxBirthProb, clearProb, resistances, mutProb))
@@ -39,48 +39,35 @@ def simulationDelayedTreatment(numTrials):
         # creating the patient
         patient = TreatedPatient(viruses, maxPop)
 
-        virusPops = []
-        resPops = []
-        
-        # combining both loops into a single 450 step loop
+        # Running 450 steps (adding drug at insertionPoint)
+        # Returns the final drug count
         for i in range(450):
             if i == insertionPoint:
                 patient.addPrescription('guttagonol')
             try:
-                virusPops.append(patient.update())
+                patient.update()
             except:
                 pass
-            try:
-                resPops.append(patient.getResistPop(['guttagonol']))
-            except:
-                resPops.append(0.0)
-        return virusPops, resPops
+        return patient.getTotalPop()
     
     # Running the trials
-    # This is incorrect
     insertionPoints = [300, 150, 75, 0]
     for insertionPoint in insertionPoints:
-        virusTrials = []
-        resTrials = []
-        for i in range(numTrials):
-            virusAdd, resAdd = Trial(insertionPoint)
-            virusTrials.append(virusAdd)
-            print "Numtrials: " + str(numTrials)
-            print "Virus Trials: " + str(virusTrials)
-            resTrials.append(resAdd)
-        virusAvg = [float(sum(col))/len(col) for col in zip(*virusTrials)]
-        resAvg = [float(sum(col))/len(col) for col in zip(*resTrials)]
-    
-        # plotting graphs for each trial. This will need to change to histogram
-        pylab.plot(range(len(virusAvg)), virusAvg, label = "Virus Average")
-        pylab.plot(range(len(resAvg)), resAvg, label = "Resistant Virus Average")
-        pylab.title("Resistant Virus Simulation. Insertion point: " + str(insertionPoint))
-        pylab.xlabel("time step")
-        pylab.ylabel("# viruses")
-        pylab.legend()
+
+        populations = []
+
+        for trial in range(numTrials):
+            trialResults = []
+            for t in range(trial):
+                trialResults.append(Trial(insertionPoint))
+            if sum(trialResults) > 0:
+                populations.append(sum(trialResults) / len(trialResults))
+            print populations
+
+        pylab.hist(populations)
         pylab.show()
 
-simulationDelayedTreatment(2)
+simulationDelayedTreatment(10)
 
 
 
