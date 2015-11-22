@@ -61,11 +61,23 @@ def simulationDelayedTreatment(numTrials):
             for t in range(trial):
                 trialResults.append(Trial(insertionPoint))
             if sum(trialResults) > 0:
-                populations.append(sum(trialResults) / len(trialResults))
+                populations.append(trialResults)
             print populations
+        
+        results = []
+        for result in populations:
+            results.append(sum(result) / len(result))
+            print "results" + str(results)
 
-        pylab.hist(populations)
-        pylab.show()
+        try:
+            pylab.hist(results)
+            pylab.title('Virus trial: insertion point:' + str(insertionPoint))
+            pylab.xlabel('Total Population Values')
+            pylab.ylabel('No of trials')
+            pylab.show()
+        except:
+            print "Something went wrong"
+            print "Populations: " +str(populations)
 
 simulationDelayedTreatment(10)
 

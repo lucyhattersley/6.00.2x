@@ -525,6 +525,7 @@ def simulationWithDrug(numViruses, maxPop, maxBirthProb, clearProb, resistances,
                 resPops.append(patient.getResistPop(['guttagonol']))
             except:
                 resPops.append(0.0)
+
         # adding guttagonol
         patient.addPrescription('guttagonol')
     
@@ -563,6 +564,6 @@ def simulationWithDrug(numViruses, maxPop, maxBirthProb, clearProb, resistances,
 
     
 
-#simulationWithDrug(100, 1000, 0.1, 0.05, {'guttagonol': False}, 0.005, 100)
-simulationWithDrug(1, 10, 1.0, 0.0, {}, 1.0, 5)
+simulationWithDrug(100, 1000, 0.1, 0.05, {'guttagonol': False}, 0.005, 100)
+#simulationWithDrug(1, 10, 1.0, 0.0, {}, 1.0, 5)
 #simulationWithDrug(1, 20, 1.0, 0.0, {"guttagonol": True}, 1.0, 5)
