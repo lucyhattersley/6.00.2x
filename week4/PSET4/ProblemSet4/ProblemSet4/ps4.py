@@ -3,7 +3,7 @@
 import numpy
 import random
 import pylab
-from ps3b import *
+from ps3b_precompiled_27 import *
 
 #
 # PROBLEM 1
@@ -69,6 +69,20 @@ def simulationDelayedTreatment(numTrials = 100):
 #        pylab.savefig('/Users/Lucy/Desktop/trial' + str(insertionPoint) + '.pdf')
 #        pylab.close()
 
+# increasing length of viruses list
+    numVirList = [100, 200, 300, 400, 500, 600, 700, 800, 900]
+    for numViruses in numVirList:
+       trialResults = []
+       for trial in range(numTrials):
+           trialResults.append(Trial(numViruses=numViruses))
+       # drawing the histogram
+       pylab.hist(trialResults, bins=10)
+       pylab.title('Virus trial: Number of Viruses = ' + str(numViruses))
+       pylab.xlabel('Total Population Values')
+       pylab.ylabel('No of trials')
+       pylab.savefig('/Users/Lucy/Desktop/trial' + str(numViruses) + '.pdf')
+       pylab.close()
+
 # maxPops trial
 #     maxPops = [1000, 2000, 4000, 8000, 10000]
 #     for maxPop in maxPops:
@@ -113,17 +127,17 @@ def simulationDelayedTreatment(numTrials = 100):
 #         pylab.savefig('/Users/Lucy/Desktop/trial' + str(clearProb) + '.pdf')
 #         pylab.close()
     
-    # Guttagonal resistance = True
-    trialResults = []
-    for trial in range(numTrials):
-        trialResults.append(Trial(resistances = {'guttagonol': True}))
-    # drawing the histogram
-    pylab.hist(trialResults, bins=10)
-    pylab.title('Virus trial:  guttagonol: True')
-    pylab.xlabel('Total Population Values')
-    pylab.ylabel('No of trials')
-    pylab.savefig('/Users/Lucy/Desktop/trial_guttagonol_true.pdf')
-    pylab.close()
+# Guttagonal resistance = True
+#     trialResults = []
+#     for trial in range(numTrials):
+#         trialResults.append(Trial(resistances = {'guttagonol': True}))
+# drawing the histogram
+#     pylab.hist(trialResults, bins=10)
+#     pylab.title('Virus trial:  guttagonol: True')
+#     pylab.xlabel('Total Population Values')
+#     pylab.ylabel('No of trials')
+#     pylab.savefig('/Users/Lucy/Desktop/trial_guttagonol_true.pdf')
+#     pylab.close()
                  
         
 simulationDelayedTreatment(100)

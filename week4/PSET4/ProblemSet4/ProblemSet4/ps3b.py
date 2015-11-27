@@ -1,7 +1,7 @@
 # Problem Set 3: Simulating the Spread of Disease and Virus Population Dynamics 
 import numpy
 import random
-from ps3b_precompiled_27 import *
+#from ps3b_precompiled_27 import *
 ''' 
 Begin helper code
 '''
@@ -355,11 +355,11 @@ class ResistantVirus(SimpleVirus):
  
  
  
-    class TreatedPatient(Patient):
-        """
-        Representation of a patient. The patient is able to take drugs and his/her
-        virus population can acquire resistance to the drugs he/she takes.
-        """
+class TreatedPatient(Patient):
+    """
+    Representation of a patient. The patient is able to take drugs and his/her
+    virus population can acquire resistance to the drugs he/she takes.
+    """
  
     def __init__(self, viruses, maxPop):
         """
