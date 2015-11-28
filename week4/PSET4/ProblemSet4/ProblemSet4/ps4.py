@@ -3,6 +3,7 @@
 import numpy
 import random
 import pylab
+import statistics
 from ps3b_precompiled_27 import *
 
 #
@@ -140,7 +141,7 @@ def simulationDelayedTreatment(numTrials = 100):
 #     pylab.close()
                  
         
-simulationDelayedTreatment(100)
+#simulationDelayedTreatment(100)
 
 #
 # PROBLEM 2
@@ -158,4 +159,111 @@ def simulationTwoDrugsDelayedTreatment(numTrials):
 
     numTrials: number of simulation runs to execute (an integer)
     """
-    # TODO
+    def Trial(insertionPoint = 150, numViruses = 100, maxPop = 1000, maxBirthProb = 0.1, clearProb = 0.05, resistances = {'guttagonol': False, 'grimpex': False}, mutProb = 0.005):
+        # creating a list of virus instances
+        viruses = []
+        for i in range(numViruses):
+            viruses.append(ResistantVirus(maxBirthProb, clearProb, resistances, mutProb))
+
+        # creating the patient
+        patient = TreatedPatient(viruses, maxPop)
+
+        # update patient for 150 steps
+        for i in range(150):
+            try:
+                patient.update()
+            except:
+                pass
+        
+        # add guttagonol
+        patient.addPrescription('guttagonol')
+        
+        # update patient for insertionPoint steps
+        for i in range(insertionPoint):
+            try:
+                patient.update()
+            except:
+                pass
+                
+        # add grimpex
+        patient.addPrescription('grimpex')
+        
+        # update patient for 150 steps
+        for i in range(150):
+            try:
+                patient.update()
+            except:
+                pass
+
+        # return patient populations
+        if patient.getTotalPop() > 0:
+            return patient.getTotalPop()
+        else:
+            return 0
+
+ #   # insertionPoint Trial
+ #   insertionPoints = [300, 150, 75, 0]
+ #
+ #   for insertionPoint in insertionPoints:
+ #       trialResults = []
+ #       for trial in range(numTrials):
+ #           trialResults.append(Trial(insertionPoint=insertionPoint))
+ #       # drawing the histogram
+ #       pylab.hist(trialResults, bins=10)
+ #       pylab.title('Virus trial:  Delay of second drug = ' + str(insertionPoint))
+ #       pylab.xlabel('Total Population Values')
+ #       pylab.ylabel('No of trials')
+ #       pylab.show()
+ #       #pylab.savefig('/Users/Lucy/Desktop/trial' + str(insertionPoint) + '.pdf')
+ #       pylab.close()
+
+#    mutProbs = [0.005, 0.01, 0.015, 0.02, 0.025, 0.03]
+#
+#    for mutProb in mutProbs:
+#        trialResults = []
+#        for trial in range(numTrials):
+#            trialResults.append(Trial(mutProb=mutProb))
+#        # drawing the histogram
+#        pylab.hist(trialResults, bins=10)
+#        pylab.title('Virus trial: mutProb = ' + str(mutProb))
+#        pylab.xlabel('Total Population Values')
+#        pylab.ylabel('No of trials')
+#        pylab.savefig('/Users/Lucy/Desktop/trial' + str(mutProb) + '.pdf')
+#        pylab.close()
+
+    # variance trial
+    insertionPoints = [300, 150, 75, 0]
+ 
+    for insertionPoint in insertionPoints:
+        trialResults = []
+        for trial in range(numTrials):
+            trialResults.append(Trial(insertionPoint=insertionPoint))
+        # drawing the histogram
+        (n, bins, patches) = pylab.hist(trialResults, bins=10)
+        pylab.title('Virus trial:  Delay of second drug = ' + str(insertionPoint))
+        pylab.xlabel('Total Population Values')
+        pylab.ylabel('No of trials')
+        
+        # printing out bin data
+        pylab.show()
+        print "Running trial with insertionPoint: " + str(insertionPoint)
+        print "Bins = " + str(n)
+                
+        # calculating and printing variance
+        binMean = sum(n) / len(n)
+        print "binMean = " + str(binMean)
+        binValuesSubMeanAndSquared = []
+        for binValue in n:
+            binValuesSubMeanAndSquared.append((binValue-binMean)**2)
+        print "binValuesSubMeanAndSquared = " + str(binValuesSubMeanAndSquared)
+        variance = sum(binValuesSubMeanAndSquared) / len(binValuesSubMeanAndSquared)
+        print "My calculated Variance is: " + str(variance)
+        print "Actual variance is " + str(statistics.variance(n))
+        print "----------"
+        
+        # Saving figure to desktop
+        #pylab.savefig('/Users/Lucy/Desktop/trial' + str(insertionPoint) + '.pdf')
+        pylab.close() # clears figure
+        
+simulationTwoDrugsDelayedTreatment(100)
+
