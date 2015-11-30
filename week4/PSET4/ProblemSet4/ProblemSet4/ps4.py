@@ -3,7 +3,6 @@
 import numpy
 import random
 import pylab
-import statistics
 from ps3b_precompiled_27 import *
 
 #
@@ -233,6 +232,9 @@ def simulationTwoDrugsDelayedTreatment(numTrials):
 
     # variance trial
     insertionPoints = [300, 150, 75, 0]
+    
+    # creating a file to contain the results
+    f = open('/Users/Lucy/Desktop/variance_trial.txt', 'w')
  
     for insertionPoint in insertionPoints:
         trialResults = []
@@ -243,27 +245,26 @@ def simulationTwoDrugsDelayedTreatment(numTrials):
         pylab.title('Virus trial:  Delay of second drug = ' + str(insertionPoint))
         pylab.xlabel('Total Population Values')
         pylab.ylabel('No of trials')
-        
-        # printing out bin data
-        pylab.show()
-        print "Running trial with insertionPoint: " + str(insertionPoint)
-        print "Bins = " + str(n)
+        #pylab.show()
                 
-        # calculating and printing variance
-        binMean = sum(n) / len(n)
-        print "binMean = " + str(binMean)
-        binValuesSubMeanAndSquared = []
-        for binValue in n:
-            binValuesSubMeanAndSquared.append((binValue-binMean)**2)
-        print "binValuesSubMeanAndSquared = " + str(binValuesSubMeanAndSquared)
-        variance = sum(binValuesSubMeanAndSquared) / len(binValuesSubMeanAndSquared)
-        print "My calculated Variance is: " + str(variance)
-        print "Actual variance is " + str(statistics.variance(n))
-        print "----------"
+        # calculating variance
+        mean = sum(n) / len(n)
+        variResults = []
+        for number in n:
+            variResults.append((number-mean)**2)
+        variance = sum(variResults) / len(variResults)
+
+        # Writing output from trial to file
+        f.write("----------\n")
+        f.write("Running trial with insertionPoint: " + str(insertionPoint) + "\n")
+        f.write("Bin values: " + str(n) + "\n")
+        f.write("Mean = " + str(mean) + "\n")
+        f.write("Variance results = " + str(variResults)  + "\n")
+        f.write("Variance is: " + str(variance) + "\n")
+        f.write("----------\n\n")
         
         # Saving figure to desktop
-        #pylab.savefig('/Users/Lucy/Desktop/trial' + str(insertionPoint) + '.pdf')
+        pylab.savefig('/Users/Lucy/Desktop/trial' + str(insertionPoint) + '.pdf')
         pylab.close() # clears figure
         
-simulationTwoDrugsDelayedTreatment(100)
-
+simulationTwoDrugsDelayedTreatment(300)
