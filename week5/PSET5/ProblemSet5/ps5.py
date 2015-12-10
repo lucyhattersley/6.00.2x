@@ -5,13 +5,23 @@
 
 import string
 # This imports everything from `graph.py` as if it was defined in this file!
-from graph import * 
+from graph import *
 
 #
 # Problem 2: Building up the Campus Map
 #
 # Before you write any code, write a couple of sentences here 
 # describing how you will model this problem as a graph. 
+# Map.txt contains lines (each with four digits). The first two are source and destination nodes. The third is distance, the fourth indoor distance.
+# These correspond to the __init__ values of WeightedEdge class: (self, src, dest, weight1, weight2):
+
+# Instantiate a WeightedDigraph object.
+# Create a function to import the map.mit_map.txt file
+# Examine each line of file individually. Split each value by the space
+# The WeightedDigraph object inherits AddNode function from Digraph. Use  it to add the 
+# first two numbers as nodes to the graph (duplicates raise a ValueError - use Try / Except) when adding nodes
+# Create a WeightedEdge instance using all four values
+# Use the AddEdge function in WeightedDigraph to add the edge to the graph.
 
 # This is a helpful exercise to help you organize your
 # thoughts before you tackle a big design problem!
@@ -37,7 +47,37 @@ def load_map(mapFilename):
     """
     # TODO
     print "Loading map from file..."
+    f = open(mapFilename, "r")
+
+    # Create a graph
+    dirGraph = WeightedDigraph()
+
+    # Spliting file into lines and matching each value to a variable
+    for line in f:
+        items = []
+        for item in line.split(" "):
+            items.append(item)
+        node1 = int(items[0])
+        node2 = int(items[1])
+        weight1 = float(items[2])
+        weight2 = float(items[3])
+
+#         # Adding nodes
+        try: 
+            dirGraph.addNode(node1)
+        except:
+            pass
+        try:
+            dirGraph.addNode(node2)
+        except:
+            pass
         
+        # creating weighted edge and adding to dirGraph
+        weightedEdge = WeightedEdge(node1, node2, weight1, weight2)
+        dirGraph.addEdge(weightedEdge)
+
+    #returning dirGraph
+    return dirGraph
 
 #
 # Problem 3: Finding the Shortest Path using Brute Force Search
@@ -70,8 +110,65 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
         If there exists no path that satisfies maxTotalDist and
         maxDistOutdoors constraints, then raises a ValueError.
     """
+
+    """ Psuedocode
+    Create an empty list of valid paths
+    Pass start and end to a DFS function.
+    DFS function creates pathDistance variables (set to 0) 
+    As it goes through each path, it should add weight1 to pathDistance (to keep track of distance values for path.
+    If path is valid and if pathDistance is less than maxTotalDistance. The Path is appended to paths (as a list), along with pathDistance values. This should be a tuple: ie ([1,2,4,5], 52)
+    
+    Now look through items in paths to find the one with shortest path
+    
+    Returns the list of paths from the one with the shortest path
+    """
+    
     #TODO
     pass
+# Depth first search Code from Lecture
+# This finds shortest path, but not weighted 
+# Probably needs to be modified to create a list of all valid paths
+# Then another function can find the shortest (by adding weight of edges)
+#def DFSShortest(graph, start, end, path = [], paths = []):
+def bruteForceSearch(digraph, start, end, maxTotalDist, path=[], paths=[]):
+    path = path + [start]
+    if start == end:
+        paths.append(path)
+        return paths
+    for node in digraph.childrenOf(start):
+        if node not in path: #avoid cycles
+            newPath = bruteForceSearch(digraph,node,end,path)
+            if newPath != None:
+                print "newPath run" 
+                path.append(newPath)
+                print "Path now" + str(path)
+    return paths
+
+#Testcode for bruteForceSearch
+n1 = Node("1")
+n2 = Node("2")
+n3 = Node("3")
+n4 = Node("4")
+n5 = Node("5")
+e1 = WeightedEdge(n1, n2, 2, 0)
+e2 = WeightedEdge(n2, n5, 3, 0)
+e3 = WeightedEdge(n1, n3, 3, 0)
+e4 = WeightedEdge(n1, n4, 4, 0)
+e5 = WeightedEdge(n4, n5, 5, 0)
+g = WeightedDigraph()
+g.addNode(n1)
+g.addNode(n2)
+g.addNode(n3)
+g.addNode(n4)
+g.addNode(n5)
+g.addEdge(e1)
+g.addEdge(e2)
+g.addEdge(e3)
+g.addEdge(e4)
+g.addEdge(e5)
+
+# results  = bruteForceSearch(g,"1", "5", 10, path=[], paths=[])
+# print results
 
 #
 # Problem 4: Finding the Shorest Path using Optimized Search Method
