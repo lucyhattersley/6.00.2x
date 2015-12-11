@@ -93,6 +93,16 @@ class WeightedDigraph(Digraph):
         for node in self.nodes:
             if node.getName() == nodeString:
                 return node
+                
+    def getWeights(self, node1, node2):
+        """
+        Takes two nodes as strings
+        Assumes edge connects two nodes
+        Returns a tuple (weight1, weight2) - corresponding to distance, outdoorDistance
+        """
+        for edge in self.edges[node1]:
+            if edge[0] == node2:
+                return (edge[1][0], edge[1][1])
 
     def addEdge(self, edge):
         src = edge.getSource()
