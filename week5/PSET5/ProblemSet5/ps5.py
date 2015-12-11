@@ -261,27 +261,24 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
         If there exists no path that satisfies maxTotalDist and
         maxDistOutdoors constraints, then raises a ValueError.
     """
-    def DFSBruteW(graph, start, end, path = [], paths = [], totalDist = 0, outdoorDist = 0):
+    def DFSBruteW(graph, start, end, path = [], paths = []):
         """
         Helper function accepts start and end nodes
         Returns a list of tuples. First item is a list of path nodes, second is another tuple (totalDist, outDoordist) 
         """
         path = path + [start]
         if start == end:
-            return (path, (totalDist, outdoorDist))
+            return (path)
         for node in graph.childrenOf(start):
             if node not in path: #avoid cycles
-                distance = graph.getWeights(start, node)
-                totalDist = totalDist + distance[0]
-                outdoorDist = outdoorDist + distance[1]
-                newPath = DFSBruteW(graph,node,end,path,paths,totalDist, outdoorDist)
+                newPath = DFSBruteW(graph,node,end,path,paths)
                 if newPath != None:
                     if node == end:
                         path = path + [end]
-                        paths.append((path, (totalDist, outdoorDist)))
+                        paths.append((path))
         return paths
 
-    def findShortest(paths, maxTotalDist, maxDistOutdoors):
+    def findShortest(graph, paths, maxTotalDist, maxDistOutdoors):
         """
         (paths). A list  of tuples. The first item in each tuple is a list of nodes. The second item is a tuple (total distance, total outdoor distance).
         (maxTotalDist) an int.
@@ -290,10 +287,20 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
         Returns list of nodes
         """
         shortest = None
-        for item in paths:
-            path = item[0]
+
+        # Calculating length of each path
+        for path in paths:
+            pathDistance  = 0
+            pathOutdoorDistance = 0
+            for i in range(len(path)-1):
+                node1 = path[i]
+                node2 = path[i+1]
+                weights = graph.getWeights(node1, node2)
+                pathDistance += weights[0]
+                pathOutdoorDistance += weights[1]
+
             if shortest == None or len(path) <= len(shortest):
-                if item[1][0] <= maxTotalDist and item[1][1] <= maxDistOutdoors:
+                if pathDistance <= maxTotalDist and pathOutdoorDistance <= maxDistOutdoors:
                     shortest = path
         if shortest != None:
             return shortest
@@ -303,25 +310,25 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
     paths = DFSBruteW(digraph, start, end)
     
     # tester code
-    with open('/Users/Lucy/Desktop/paths.txt', 'w+') as f:
-        for item in paths:
-            path = item[0]
-            if len(path) <= 6:
-                td = 0
-                do = 0
-                for i in range(len(path)-1):
-                    node1 = path[i]
-                    node2 = path[i+1]
-                    weights = digraph.getWeights(node1, node2)
-                    td += weights[0]
-                    do += weights[1]
-                f.write("----------\n")
-                f.write(str(item))
-                f.write('\n')
-                f.write("Calculated weight: " + str(td) + ',' + str(do))
-                f.write('\n')
+#     with open('/Users/Lucy/Desktop/paths.txt', 'w+') as f:
+#         for item in paths:
+#             path = item[0]
+#             if len(path) <= 6:
+#                 td = 0
+#                 do = 0
+#                 for i in range(len(path)-1):
+#                     node1 = path[i]
+#                     node2 = path[i+1]
+#                     weights = digraph.getWeights(node1, node2)
+#                     td += weights[0]
+#                     do += weights[1]
+#                 f.write("----------\n")
+#                 f.write(str(item))
+#                 f.write('\n')
+#                 f.write("Calculated weight: " + str(td) + ',' + str(do))
+#                 f.write('\n')
 
-    return findShortest(paths, maxTotalDist, maxDistOutdoors)
+    return findShortest(digraph, paths, maxTotalDist, maxDistOutdoors)
 #
 # Problem 4: Finding the Shorest Path using Optimized Search Method
 #
