@@ -86,34 +86,34 @@ def load_map(mapFilename):
 # and what the constraints are
 
 # first try to find a single path
-def DFS(graph, start, end, path = [], shortest = None):
-    #assumes graph is a Digraph
-    #assumes start and end are nodes in graph
-    path = path + [start]
-#    print 'Current dfs path:', printPath(path)
-    if start == end:
-        return path
-    for node in graph.childrenOf(start):
-        if node not in path: #avoid cycles
-            newPath = DFS(graph,node,end,path,shortest)
-            if newPath != None:
-                return newPath
+# def DFS(graph, start, end, path = [], shortest = None):
+#     #assumes graph is a Digraph
+#     #assumes start and end are nodes in graph
+#     path = path + [start]
+# #    print 'Current dfs path:', printPath(path)
+#     if start == end:
+#         return path
+#     for node in graph.childrenOf(start):
+#         if node not in path: #avoid cycles
+#             newPath = DFS(graph,node,end,path,shortest)
+#             if newPath != None:
+#                 return newPath
 
 # This code finds shortest path
-def DFSShortest(graph, start, end, path = [], shortest = None):
-    #assumes graph is a Digraph
-    #assumes start and end are nodes in graph
-    path = path + [start]
-#    print 'Current dfs path:', printPath(path)
-    if start == end:
-        return path
-    for node in graph.childrenOf(start):
-        if node not in path: #avoid cycles
-            if shortest == None or len(path)<len(shortest):
-                newPath = DFSShortest(graph,node,end,path,shortest)
-                if newPath != None:
-                    shortest = newPath
-    return shortest
+# def DFSShortest(graph, start, end, path = [], shortest = None):
+#     #assumes graph is a Digraph
+#     #assumes start and end are nodes in graph
+#     path = path + [start]
+# #    print 'Current dfs path:', printPath(path)
+#     if start == end:
+#         return path
+#     for node in graph.childrenOf(start):
+#         if node not in path: #avoid cycles
+#             if shortest == None or len(path)<len(shortest):
+#                 newPath = DFSShortest(graph,node,end,path,shortest)
+#                 if newPath != None:
+#                     shortest = newPath
+#     return shortest
 
 # Adapting DFSShortest to return all paths
 # def DFSBrute(graph, start, end, path = [], paths = []):
@@ -151,83 +151,83 @@ def DFSShortest(graph, start, end, path = [], shortest = None):
 #     return paths
     
 # Adapting DFSBrute to return paths, total distances and outdoor distances
-def DFSBruteW(graph, start, end, path = [], paths = [], totalDist = 0, outdoorDist = 0):
-    #assumes graph is a Digraph
-    #assumes start and end are nodes in graph
-    path = path + [start]
-    if start == end:
-        return (path, (totalDist, outdoorDist))
-    for node in graph.childrenOf(start):
-        if node not in path: #avoid cycles
-            distance = graph.getWeights(start, node)
-            totalDist = totalDist + distance[0]
-            outdoorDist = outdoorDist + distance[1]
-            newPath = DFSBruteW(graph,node,end,path,paths,totalDist, outdoorDist)
-            if newPath != None:
-                if node == end:
-                    path = path + [end]
-                    paths.append((path, (totalDist, outdoorDist)))
-    return paths
-    
-def findShortestTotal(paths):
-    """
-    Accepts (paths). A list  of tuples. The first item in each tuple is a list of nodes. The second item is a tuple (total distance, total outdoor distance).
-    Loops through each path in paths. If distance is shorter than current, appends shortest path (the nodes, not the distance)
-    Returns the list of nodes corresponding to shortest path
-    """
-    shortest = None
-    for path in paths:
-        if shortest == None or path[1][0] < shortest[1][0]:
-            shortest = path
-    return shortest[0]
-    
-def findShortestOutdoor(paths):
-    """
-    Accepts (paths). A list  of tuples. The first item in each tuple is a list of nodes. The second item is a tuple (total distance, total outdoor distance).
-    Loops through paths and finds one with lowest outdoor distance value
-    Returns the list of nodes corrosponding to shortest outdoor path
-    """
-    shortest = None
-    for path in paths:
-        if shortest == None or path[1][1] < shortest[1][1]:
-            shortest = path
-    return shortest[0]
+# def DFSBruteW(graph, start, end, path = [], paths = [], totalDist = 0, outdoorDist = 0):
+#     #assumes graph is a Digraph
+#     #assumes start and end are nodes in graph
+#     path = path + [start]
+#     if start == end:
+#         return (path, (totalDist, outdoorDist))
+#     for node in graph.childrenOf(start):
+#         if node not in path: #avoid cycles
+#             distance = graph.getWeights(start, node)
+#             totalDist = totalDist + distance[0]
+#             outdoorDist = outdoorDist + distance[1]
+#             newPath = DFSBruteW(graph,node,end,path,paths,totalDist, outdoorDist)
+#             if newPath != None:
+#                 if node == end:
+#                     path = path + [end]
+#                     paths.append((path, (totalDist, outdoorDist)))
+#     return paths
+#     
+# def findShortestTotal(paths):
+#     """
+#     Accepts (paths). A list  of tuples. The first item in each tuple is a list of nodes. The second item is a tuple (total distance, total outdoor distance).
+#     Loops through each path in paths. If distance is shorter than current, appends shortest path (the nodes, not the distance)
+#     Returns the list of nodes corresponding to shortest path
+#     """
+#     shortest = None
+#     for path in paths:
+#         if shortest == None or path[1][0] < shortest[1][0]:
+#             shortest = path
+#     return shortest[0]
+#     
+# def findShortestOutdoor(paths):
+#     """
+#     Accepts (paths). A list  of tuples. The first item in each tuple is a list of nodes. The second item is a tuple (total distance, total outdoor distance).
+#     Loops through paths and finds one with lowest outdoor distance value
+#     Returns the list of nodes corrosponding to shortest outdoor path
+#     """
+#     shortest = None
+#     for path in paths:
+#         if shortest == None or path[1][1] < shortest[1][1]:
+#             shortest = path
+#     return shortest[0]
+# 
+# def findShortestDistance(paths, maxTotalDist, maxDistOutdoors):
+#     """
+#     (paths). A list  of tuples. The first item in each tuple is a list of nodes. The second item is a tuple (total distance, total outdoor distance).
+#     (maxTotalDist) an int.
+#     (maxDistOutdoors) an int.
+#     Loops through paths and finds shortest one that does not exceed maxTotalDist and maxDistdoors
+#     Returns list of nodes
+#     """
+#     shortest = None
+#     for path in paths:
+#         if shortest == None or path[1][0] < shortest[1][0]:
+#             if path[1][0] < maxTotalDist and path[1][1] < maxDistOutdoors:
+#                 shortest = path
+#     if shortest != None:
+#         return shortest[0]
+#     else:
+#         raise ValueError
 
-def findShortestDistance(paths, maxTotalDist, maxDistOutdoors):
-    """
-    (paths). A list  of tuples. The first item in each tuple is a list of nodes. The second item is a tuple (total distance, total outdoor distance).
-    (maxTotalDist) an int.
-    (maxDistOutdoors) an int.
-    Loops through paths and finds shortest one that does not exceed maxTotalDist and maxDistdoors
-    Returns list of nodes
-    """
-    shortest = None
-    for path in paths:
-        if shortest == None or path[1][0] < shortest[1][0]:
-            if path[1][0] < maxTotalDist and path[1][1] < maxDistOutdoors:
-                shortest = path
-    if shortest != None:
-        return shortest[0]
-    else:
-        raise ValueError
-
-def findShortest(paths, maxTotalDist, maxDistOutdoors):
-    """
-    (paths). A list  of tuples. The first item in each tuple is a list of nodes. The second item is a tuple (total distance, total outdoor distance).
-    (maxTotalDist) an int.
-    (maxDistOutdoors) an int.
-    Loops through paths and finds shortest one that does not exceed maxTotalDist and maxDistdoors
-    Returns list of nodes
-    """
-    shortest = None
-    for path in paths:
-        if shortest == None or len(path[1]) < len(shortest[1]):
-            if path[1][0] < maxTotalDist and path[1][1] < maxDistOutdoors:
-                shortest = path
-    if shortest != None:
-        return shortest[0]
-    else:
-        raise ValueError
+# def findShortest(paths, maxTotalDist, maxDistOutdoors):
+#     """
+#     (paths). A list  of tuples. The first item in each tuple is a list of nodes. The second item is a tuple (total distance, total outdoor distance).
+#     (maxTotalDist) an int.
+#     (maxDistOutdoors) an int.
+#     Loops through paths and finds shortest one that does not exceed maxTotalDist and maxDistdoors
+#     Returns list of nodes
+#     """
+#     shortest = None
+#     for path in paths:
+#         if shortest == None or len(path[1]) < len(shortest[1]):
+#             if path[1][0] < maxTotalDist and path[1][1] < maxDistOutdoors:
+#                 shortest = path
+#     if shortest != None:
+#         return shortest[0]
+#     else:
+#         raise ValueError
 
 
 
@@ -261,24 +261,25 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
         If there exists no path that satisfies maxTotalDist and
         maxDistOutdoors constraints, then raises a ValueError.
     """
-    def DFSBruteW(graph, start, end, path = [], paths = []):
+    global f #set tester file to global
+    def DFSBruteW(digraph, start, end, path = [], paths = []):
         """
         Helper function accepts start and end nodes
-        Returns a list of tuples. First item is a list of path nodes, second is another tuple (totalDist, outDoordist) 
+        Returns a list of paths (each path a list of nodes) 
         """
         path = path + [start]
+        f.write(str(path)) # tester code. Writes all paths taken to file
+        f.write('\n' )
+
         if start == end:
-            return (path)
-        for node in graph.childrenOf(start):
+            path = path + [end]
+            paths.append(path)
+        for node in digraph.childrenOf(start):
             if node not in path: #avoid cycles
-                newPath = DFSBruteW(graph,node,end,path,paths)
-                if newPath != None:
-                    if node == end:
-                        path = path + [end]
-                        paths.append((path))
+                newPath = DFSBruteW(digraph,node,end,path,paths)
         return paths
 
-    def findShortest(graph, paths, maxTotalDist, maxDistOutdoors):
+    def findShortest(digraph, paths, maxTotalDist, maxDistOutdoors):
         """
         (paths). A list  of tuples. The first item in each tuple is a list of nodes. The second item is a tuple (total distance, total outdoor distance).
         (maxTotalDist) an int.
@@ -287,17 +288,17 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
         Returns list of nodes
         """
         shortest = None
-
         # Calculating length of each path
+        
         for path in paths:
             pathDistance  = 0
             pathOutdoorDistance = 0
             for i in range(len(path)-1):
                 node1 = path[i]
                 node2 = path[i+1]
-                weights = graph.getWeights(node1, node2)
-                pathDistance += weights[0]
-                pathOutdoorDistance += weights[1]
+                weights = digraph.getWeights(node1, node2)
+                pathDistance = pathDistance + weights[0]
+                pathOutdoorDistance = pathDistance + weights[1]
 
             if shortest == None or len(path) <= len(shortest):
                 if pathDistance <= maxTotalDist and pathOutdoorDistance <= maxDistOutdoors:
@@ -308,26 +309,6 @@ def bruteForceSearch(digraph, start, end, maxTotalDist, maxDistOutdoors):
             return ValueError
 
     paths = DFSBruteW(digraph, start, end)
-    
-    # tester code
-#     with open('/Users/Lucy/Desktop/paths.txt', 'w+') as f:
-#         for item in paths:
-#             path = item[0]
-#             if len(path) <= 6:
-#                 td = 0
-#                 do = 0
-#                 for i in range(len(path)-1):
-#                     node1 = path[i]
-#                     node2 = path[i+1]
-#                     weights = digraph.getWeights(node1, node2)
-#                     td += weights[0]
-#                     do += weights[1]
-#                 f.write("----------\n")
-#                 f.write(str(item))
-#                 f.write('\n')
-#                 f.write("Calculated weight: " + str(td) + ',' + str(do))
-#                 f.write('\n')
-
     return findShortest(digraph, paths, maxTotalDist, maxDistOutdoors)
 #
 # Problem 4: Finding the Shorest Path using Optimized Search Method
@@ -360,11 +341,14 @@ def directedDFS(digraph, start, end, maxTotalDist, maxDistOutdoors):
     #TODO
     pass
 
+# Tester file
+f = open('/Users/Lucy/Desktop/paths.txt', 'w+') # create global test file
+
 # Uncomment below when ready to test
 #### NOTE! These tests may take a few minutes to run!! ####
 if __name__ == '__main__':
 #     Test cases
-    mitMap = load_map("mit_map.txt")
+    mitMap = load_map("/Users/Lucy/Dropbox/2_active_projects/6002x/week5/PSET5/ProblemSet5/mit_map.txt")
     print isinstance(mitMap, Digraph)
     print isinstance(mitMap, WeightedDigraph)
     print 'nodes', mitMap.nodes
@@ -379,7 +363,7 @@ if __name__ == '__main__':
 #     print "Find the shortest-path from Building 32 to 56"
 #     expectedPath1 = ['32', '56']
 #     brutePath1 = bruteForceSearch(mitMap, '32', '56', LARGE_DIST, LARGE_DIST)
-#    dfsPath1 = directedDFS(mitMap, '32', '56', LARGE_DIST, LARGE_DIST)
+#     dfsPath1 = directedDFS(mitMap, '32', '56', LARGE_DIST, LARGE_DIST)
 #     print "Expected: ", expectedPath1
 #     print "Brute-force: ", brutePath1
 #    print "DFS: ", dfsPath1
@@ -410,14 +394,14 @@ if __name__ == '__main__':
 #     print "Correct? BFS: {0}; DFS: {1}".format(expectedPath3 == brutePath3, expectedPath3 == dfsPath3)
 
 #     Test case 4
-    print "---------------"
-    print "Test case 4:"
-    print "Find the shortest-path from Building 2 to 9 without going outdoors"
-    expectedPath4 = ['2', '4', '10', '13', '9']
-    brutePath4 = bruteForceSearch(mitMap, '2', '9', LARGE_DIST, 0)
+#     print "---------------"
+#     print "Test case 4:"
+#     print "Find the shortest-path from Building 2 to 9 without going outdoors"
+#     expectedPath4 = ['2', '4', '10', '13', '9']
+#     brutePath4 = bruteForceSearch(mitMap, '2', '9', LARGE_DIST, 0)
 #     dfsPath4 = directedDFS(mitMap, '2', '9', LARGE_DIST, 0)
-    print "Expected: ", expectedPath4
-    print "Brute-force: ", brutePath4
+#     print "Expected: ", expectedPath4
+#     print "Brute-force: ", brutePath4
 #     print "DFS: ", dfsPath4
 #     print "Correct? BFS: {0}; DFS: {1}".format(expectedPath4 == brutePath4, expectedPath4 == dfsPath4)
 
@@ -434,14 +418,14 @@ if __name__ == '__main__':
 #     print "Correct? BFS: {0}; DFS: {1}".format(expectedPath5 == brutePath5, expectedPath5 == dfsPath5)
 
 #     Test case 6
-#     print "---------------"
-#     print "Test case 6:"
-#     print "Find the shortest-path from Building 1 to 32 without going outdoors"
-#     expectedPath6 = ['1', '3', '10', '4', '12', '24', '34', '36', '32']
-#     brutePath6 = bruteForceSearch(mitMap, '1', '32', LARGE_DIST, 0)
-#     dfsPath6 = directedDFS(mitMap, '1', '32', LARGE_DIST, 0)
-#     print "Expected: ", expectedPath6
-#     print "Brute-force: ", brutePath6
+    print "---------------"
+    print "Test case 6:"
+    print "Find the shortest-path from Building 1 to 32 without going outdoors"
+    expectedPath6 = ['1', '3', '10', '4', '12', '24', '34', '36', '32']
+    brutePath6 = bruteForceSearch(mitMap, '1', '32', LARGE_DIST, 0)
+    dfsPath6 = directedDFS(mitMap, '1', '32', LARGE_DIST, 0)
+    print "Expected: ", expectedPath6
+    print "Brute-force: ", brutePath6
 #     print "DFS: ", dfsPath6
 #     print "Correct? BFS: {0}; DFS: {1}".format(expectedPath6 == brutePath6, expectedPath6 == dfsPath6)
 
@@ -450,12 +434,12 @@ if __name__ == '__main__':
 #     print "Test case 7:"
 #     print "Find the shortest-path from Building 8 to 50 without going outdoors"
 #     bruteRaisedErr = 'No'
-#     dfsRaisedErr = 'No'
+# #     dfsRaisedErr = 'No'
 #     try:
 #         bruteForceSearch(mitMap, '8', '50', LARGE_DIST, 0)
 #     except ValueError:
 #         bruteRaisedErr = 'Yes'
-    
+#     
 #     try:
 #         directedDFS(mitMap, '8', '50', LARGE_DIST, 0)
 #     except ValueError:
