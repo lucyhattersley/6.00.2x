@@ -114,14 +114,9 @@ class WeightedDigraph(Digraph):
         self.edges[src].append([dest, (totalDistance, outdoorDistance)])
 
     def childrenOf(self, node):
-#         return self.edges[node]
-        foo = (i[0] for i in self.edges[node])
         result = []
-        while True:
-            try:
-                result.append(foo.next())
-            except:
-                break
+        for item in self.edges[node]:
+            result.append(item[0])
         return result
 
     def __str__(self):
