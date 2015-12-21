@@ -22,9 +22,9 @@ def plotData(fileName):
     pylab.xlabel('Force (Newtons)')
     pylab.ylabel('Distance (meters)')
 
-springData = "/Users/Lucy/Dropbox/2_active_projects/6002x/week4/L7/lectureCode_springData.txt"
+springData = "/Users/Lucy/Dropbox/1_active_projects/6002x/week4/L7/lectureCode_springData.txt"
 
-#plotData('')
+#plotData(springData)
 #pylab.show()
 
 def testErrors(ntrials=100000,npts=100):
@@ -207,7 +207,7 @@ def tryFits1(fName):
 
 fitData(springData)
 pylab.show()
-
+#
 fitData3(springData)
 pylab.show()
 

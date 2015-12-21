@@ -83,7 +83,7 @@ class WeightedEdge(Edge):
 
     def __str__(self):
         return '{0}->{1} ({2}, {3})'.format(self.src, self.dest, self.weight1, self.weight2)
-	
+
 class WeightedDigraph(Digraph):
     def __init__(self):
         Digraph.__init__(self)

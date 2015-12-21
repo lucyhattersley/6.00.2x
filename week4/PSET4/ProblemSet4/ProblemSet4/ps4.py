@@ -250,16 +250,16 @@ def simulationTwoDrugsDelayedTreatment(numTrials):
         # calculating variance
         mean = sum(n) / len(n)
         variResults = []
-        for number in n:
+        for number in trialResults:
             variResults.append((number-mean)**2)
         variance = sum(variResults) / len(variResults)
 
         # Writing output from trial to file
         f.write("----------\n")
         f.write("Running trial with insertionPoint: " + str(insertionPoint) + "\n")
-        f.write("Bin values: " + str(n) + "\n")
-        f.write("Mean = " + str(mean) + "\n")
-        f.write("Variance results = " + str(variResults)  + "\n")
+        #f.write("Trial results: " + str(trialResults) + "\n")
+        #f.write("Mean = " + str(mean) + "\n")
+        #f.write("Variance results = " + str(variResults)  + "\n")
         f.write("Variance is: " + str(variance) + "\n")
         f.write("----------\n\n")
         
